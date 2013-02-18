@@ -26,11 +26,48 @@ public class HelloActivity extends Activity {
         return true;
     }
     
-    /** Called when user clicks the Send button **/
-    public void sendMessage(View view) {
+    /** Called when user clicks the Login button **/
+    public void login(View view) {
+    	int count = 0; //need to change later
+    	String message;
     	Intent intent = new Intent(this, DisplayMessageActivity.class);
-    	EditText editText = (EditText) findViewById(R.id.edit_message);
-    	String message = editText.getText().toString();
+    	EditText editTextUser = (EditText) findViewById(R.id.user_message);
+    	EditText editTextPassword = (EditText) findViewById(R.id.password_message);
+    	String username = editTextUser.getText().toString();
+    	String password = editTextPassword.getText().toString();
+    	//Check username and password in database, get the count and return
+    	if (count == 1) {
+    		message = "Welcome back " + username + "!\n You have logged in " + Integer.toString(count) + " times.";
+    	} else if (count == -1){
+    		message = "Invalid username and password combination. Please try again.";
+    	} else {
+    		message = "Unknown error: " + Integer.toString(count);
+    	}
+    	intent.putExtra(EXTRA_MESSAGE, message);
+    	startActivity(intent);
+    }
+    
+    /** Called when user clicks the Add User button **/
+    public void addUser(View view) {
+    	int count = 0; //need to change that for later
+    	String message;
+    	Intent intent = new Intent(this, DisplayMessageActivity.class);
+    	EditText editTextUser = (EditText) findViewById(R.id.user_message);
+    	EditText editTextPassword = (EditText) findViewById(R.id.password_message);
+    	String username = editTextUser.getText().toString();
+    	String password = editTextPassword.getText().toString();
+    	// send username and password to database
+    	if (count == 1) {
+    		message = "Welcome " + username + "!\n You have logged in 1 time."; 
+    	} else if (count == -2) {
+    		message = "The user name should not be empty. Please try again.";
+    	} else if (count == -3) {
+    		message = "The user name should not be empty or more than 128 characters. Please try again.";
+    	} else if (count == -4) {
+    		message = "The password should not be longer than 128 characters. Please try again.";
+    	} else {
+    		message = "Unknown error: " + Integer.toString(count);
+    	}
     	intent.putExtra(EXTRA_MESSAGE, message);
     	startActivity(intent);
     }

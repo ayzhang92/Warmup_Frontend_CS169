@@ -11,7 +11,8 @@ import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
 
 import android.content.Intent;
-import android.widget.TextView; 
+import android.widget.TextView;
+import android.view.View;
 
 public class DisplayMessageActivity extends Activity {
 
@@ -23,13 +24,14 @@ public class DisplayMessageActivity extends Activity {
 		// Get message from intent
 		Intent intent = getIntent();
 		String message = intent.getStringExtra(HelloActivity.EXTRA_MESSAGE);
+	    
+		setContentView(R.layout.activity_displaymessage);
 		
-		// Create text view
-		TextView textView = new TextView(this);
+		// Edit text view message
+		TextView textView = (TextView) findViewById(R.id.login_message);
 	    textView.setTextSize(40);
 	    textView.setText(message);
-		
-		setContentView(textView);
+	    
 		// Show the Up button in the action bar.
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -58,6 +60,10 @@ public class DisplayMessageActivity extends Activity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	public void logout(View view) {
+		finish();
 	}
 
 }
