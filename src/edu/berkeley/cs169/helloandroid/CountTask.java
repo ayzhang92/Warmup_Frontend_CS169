@@ -11,8 +11,9 @@ import org.apache.http.HttpEntity;
 
 import org.json.JSONObject;
 
-import java.util.HashMap;
 import java.io.InputStream;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 public class CountTask extends AsyncTask<String, Void, int[]> {
 	
@@ -30,30 +31,38 @@ public class CountTask extends AsyncTask<String, Void, int[]> {
 			DefaultHttpClient httpClient = new DefaultHttpClient();
 			HttpPost httpPost = new HttpPost("http://damp-wave-7108.herokuapp.com/users/" + uri);
 			
-			// Create JSON dictionary for username and password, credentials checked in server
-			HashMap<String, String> credMap = new HashMap<String, String>();
-			credMap.put("user", username);
-			credMap.put("password", password);
-			JSONObject credentials = new JSONObject(credMap);
-			StringEntity credJson = new StringEntity(credentials.toString());
+			// Create JSON dictionary for username and password
+			JSONObject credentials = new JSONObject();
+			credentials.put("user", username);
+			credentials.put("password", password);
+			StringEntity credEntity = new StringEntity(credentials.toString());
 			
-			httpPost.setEntity(credJson);
+			httpPost.setEntity(credEntity);
+			httpPost.addHeader("Content-type", "application/json");
 	
-			// Parse the response for an errCode and count
+			// Parse the response from the server for an errCode and count
 			HttpResponse httpResponse = httpClient.execute(httpPost);
 			HttpEntity entity = httpResponse.getEntity();
+			StringBuilder builder = new StringBuilder();
 			if (entity != null) {
 				InputStream instream = entity.getContent();
-				JSONObject jsonResponse = new JSONObject(instream); //need to turn the object from entity to json
+				BufferedReader reader = new BufferedReader(new InputStreamReader(instream));
+		        String line;
+		        while ((line = reader.readLine()) != null) {
+		          builder.append(line);
+		        }
+		        instream.close();
+				JSONObject jsonResponse = new JSONObject(builder.toString());
 				errCode = jsonResponse.getString("errCode");
-				count = jsonResponse.getString("count");
+				if (errCode == "1") {
+					count = jsonResponse.getString("count");
+				}
 			}
 			int[] errCount = new int[]{Integer.parseInt(errCode), Integer.parseInt(count)};
 			return errCount;
 			
 		} catch (Exception e) {
 			return null;
-			
 		}
 	}
 	

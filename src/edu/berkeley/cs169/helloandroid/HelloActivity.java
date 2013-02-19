@@ -58,6 +58,8 @@ public class HelloActivity extends Activity {
     		if (codeCount != null) {
         		errCode = codeCount[0];
         		count = codeCount[1];
+        	} else {
+        		errCode = -6; //indicates exception thrown during async task
         	}
     	} catch (Exception e) {
     		errCode = -5;
@@ -71,13 +73,11 @@ public class HelloActivity extends Activity {
     	} else if (errCode == -1){
     		message = "Invalid username and password combination. Please try again.";
     	} else if (errCode == -2) {
-    		message = "The user name should not be empty. Please try again.";
+    		message = "The username already exists. Please try again.";
     	} else if (errCode == -3) {
     		message = "The user name should not be empty or more than 128 characters. Please try again.";
     	} else if (errCode == -4) {
     		message = "The password should not be longer than 128 characters. Please try again.";
-    	} else if (errCode == -5) {
-    		message = "Something went wrong with the AsyncTask";
     	} else {
     		message = "Unknown error: " + Integer.toString(errCode);
     	}
