@@ -54,7 +54,7 @@ public class CountTask extends AsyncTask<String, Void, int[]> {
 		        instream.close();
 				JSONObject jsonResponse = new JSONObject(builder.toString());
 				errCode = jsonResponse.getString("errCode");
-				if (errCode == "1") {
+				if (errCode.equals("1")) {
 					count = jsonResponse.getString("count");
 				}
 			}
